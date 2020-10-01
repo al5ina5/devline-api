@@ -1,11 +1,25 @@
 require('dotenv').config()
 const Discord = require('discord.js')
+const express = require('express')
+const PORT = process.env.PORT || 5000
+const app = express()
 const fs = require('fs')
 
 // Create a Discord.Client() instance.
 const client = new Discord.Client()
 
 exports.client = client
+
+// * Server Setup
+app.use(express.json({extended:false}))
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+
+app.get('/', (req, res) => res.send('Devline Server!'))
+
+// * Server routes initialization
+
+app.use('/api',require('./routes/create'))
 
 // Load all commands into the client's commands object from the /commands/ folder.
 client.commands = {}
