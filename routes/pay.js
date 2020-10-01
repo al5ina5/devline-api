@@ -11,28 +11,24 @@ const stripe = require('stripe')(
 //* @desc    Create a new job posing
 //* @access  PUBLIC
 
-router.post(
-    '/pay',
-    [check('job_id', 'Title is required').not().isEmpty()],
-    async (req, res) => {
-        const errors = validationResult(req)
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors })
-        }
-        try {
-            const session = await stripe.checkout.sessions.create({
-                payment_method_types: ['card'],
-                mode: 'setup',
-                success_url: `http://localhost:3000/checkout/complete?session_id=${req.body.job_id}`,
-                cancel_url: `http://localhost:3000/`
-            })
+router.post('/', async (req, res) => {
+    // const errors = validationResult(req)
+    // if (!errors.isEmpty()) {
+    //     return res.status(400).json({ errors: errors })
+    // }
+    try {
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            mode: 'setup',
+            success_url: `http://localhost:3000/checkout/complete?session_id=${req.query.uid}`,
+            cancel_url: `http://localhost:3000/`
+        })
 
-            return res.status(200).json(session)
-        } catch (err) {
-            console.error(err)
-            return res.status(500).send('Server Error')
-        }
+        return res.status(200).json(session)
+    } catch (err) {
+        console.error(err)
+        return res.status(500).send('Server Error')
     }
-)
+})
 
 module.exports = router

@@ -38,4 +38,16 @@ router.post(
     }
 )
 
+router.get('/get/:id', async (req, res) => {
+    try {
+        const { title, description, skillset } = req.body
+        console.log(req.params.id)
+        const job = await db.Job.findById(req.params.id)
+        return res.status(200).json(job)
+    } catch (err) {
+        console.error(err)
+        return res.status(500).send('Server Error')
+    }
+})
+
 module.exports = router

@@ -4,18 +4,20 @@ const express = require('express')
 const PORT = process.env.PORT || 5000
 const app = express()
 const fs = require('fs')
+const bodyParser = require('body-parser')
+var cors = require('cors')
 
 // Create a Discord.Client() instance.
 const client = new Discord.Client()
 
 exports.client = client
-
-app.use(express.json({ extended: false }))
+app.use(cors())
+app.use(bodyParser.json())
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
 app.get('/', (req, res) => res.send('Devline Server!'))
 
-app.use('/api', require('./routes/create'))
-app.use('/api', require('./routes/pay'))
+app.use('/api/jobs/', require('./routes/jobs'))
+app.use('/api/pay/', require('./routes/pay'))
 
 // Load all commands into the client's commands object from the /commands/ folder.
 client.commands = {}
