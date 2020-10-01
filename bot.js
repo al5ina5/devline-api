@@ -10,16 +10,12 @@ const client = new Discord.Client()
 
 exports.client = client
 
-// * Server Setup
-app.use(express.json({extended:false}))
-
+app.use(express.json({ extended: false }))
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
-
 app.get('/', (req, res) => res.send('Devline Server!'))
 
-// * Server routes initialization
-
-app.use('/api',require('./routes/create'))
+app.use('/api', require('./routes/create'))
+app.use('/api', require('./routes/pay'))
 
 // Load all commands into the client's commands object from the /commands/ folder.
 client.commands = {}
